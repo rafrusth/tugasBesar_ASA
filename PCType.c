@@ -1,8 +1,52 @@
-#ifndef PC_C
-#define PC_C
-#include "PC.h"
+#ifndef PCType_C
+#define PCType_C
+#include "PCType.h"
 
-/// Make
+/// Linked List
+Address alokasi(infoType PC) {
+    // Kamus Lokal
+    Address P;
+
+    // Algoritma
+    P = (Address) malloc(sizeof(NodePC));
+    if (P != NULL) {
+        info(P) = PC;
+        next(P) = NULL;
+    }
+
+    return P;
+}
+
+void dealokasi(Address P) {
+    // Kamus Lokal
+
+    // Algoritma
+    if (P != NULL) {
+        next(P) = NULL;
+    }
+    free(P);
+    P = NULL;
+}
+
+
+int nbElmLList(LListPC LL) {
+    // Kamus Lokal
+    Address P;
+    int counter;
+
+    // Algoritma
+    P = first(LL);
+    counter = 0;
+    while (P != NULL) {
+        counter++;
+        P = next(P);
+    }
+
+    return counter;
+
+}
+
+/// Make Objek
 void makeCPU(CPU *cpu, char *p_name, char *p_socket, int p_tdp) {
     // Kamus Lokal
 
@@ -29,7 +73,16 @@ void makeRAM(RAM *ram, char *p_name, int p_ddr) {
     (*ram).ddr = p_ddr;
 }
 
-/// Create List
+void makePC(PC *pc, CPU p_cpu, Motherboard p_mobo, RAM p_ram) {
+    // Kamus Lokal
+
+    // Algoritma
+    (*pc).cpu = p_cpu;
+    (*pc).motherboard = p_mobo;
+    (*pc).ram = p_ram;
+}
+
+/// Create Koleksi
 void createListCPU(ListCPU *L) {
     // Kamus Lokal
     int i;
@@ -68,13 +121,20 @@ void createListRAM(ListRAM *L) {
     }
 }
 
-/// Print List
+void createLListPC(LListPC *LL) {
+    // Kamus Lokal
+
+    // Algoritma
+    first(*LL) = NULL;
+}
+
+/// Print Koleksi
 void printListCPU(ListCPU L) {
     // Kamus Lokal
     int i;
 
     // Algoritma
-    for (i = 0; i < NBELM; i++) {
+    for (i = 0; i < L.size; i++) { // Yang ngga NULL
         printf("%d) %s [Socket: %s, TDP: %d]\n", i + 1,
                                             L.container[i].name,
                                             L.container[i].socket,
@@ -87,7 +147,7 @@ void printListMotheboard(ListMotherboard L) {
     int i;
 
     // Algoritma
-    for (i = 0; i < NBELM; i++) {
+    for (i = 0; i < L.size; i++) {
         printf("%d) %s [Socket: %s, DDR: %d]\n", i + 1,
                                             L.container[i].name,
                                             L.container[i].socket,
@@ -100,11 +160,37 @@ void printListRAM(ListRAM L) {
     int i;
 
     // Algoritma
-    for (i = 0; i < NBELM; i++) {
+    for (i = 0; i < L.size; i++) {
         printf("%d) %s [DDR: %d]\n", i + 1,
                                 L.container[i].name,
                                 L.container[i].ddr);
     }
+}
+
+void printLListPC(LListPC LL) {
+    // Kamus Lokal
+    Address P;
+    int counter;
+    
+    // Algoritma
+    P = first(LL);
+    if (P != NULL) {
+        counter = 0;
+        do {
+            counter++;
+            printf("\n[ ========= PC %d ========= ]\n", counter);
+            printf("/* Spesifikasi Komponen */\n");
+            printf("- [CPU, Motherboard] Socket : %s\n", info(P).cpu.socket);
+            printf("- [RAM, Motherboard] DDR    : %d\n", info(P).ram.ddr);
+
+            printf("\n/* Rekomendasi Komponen PC */\n");
+            printf("- CPU\t      : %s\n", info(P).cpu.name);
+            printf("- Motherboard : %s\n", info(P).motherboard.name);
+            printf("- RAM\t      : %s\n", info(P).ram.name);
+            P = next(P);
+        } while (P != NULL);
+    }
+
 }
 
 /// Insert Item
@@ -177,6 +263,25 @@ void insertListRAM(ListRAM *L, RAM item) {
         }
         (*L).container[emptyIdx] = item;
         (*L).size++;
+    }
+}
+
+void insertLListPC(LListPC *LL, infoType PC) {
+    // Kamus Lokal
+    Address P,Q;
+
+    // Algoritma
+    P = alokasi(PC);
+    Q = first(*LL);
+    if (P != NULL) {
+        if (first(*LL) == NULL) {
+            first(*LL) = P;
+        } else {
+            while (next(Q) != NULL) {
+                Q = next(Q);
+            }
+            next(Q) = P;
+        }
     }
 }
 

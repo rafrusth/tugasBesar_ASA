@@ -2,31 +2,22 @@
  *  Pembuat   : Rafif Setya Imaduddin (24060124130115)
  */
 
-#include "pc.h"
+#include "PCType.h"
 
-void bruteForce(ListCPU l_cpu, ListMotherboard l_mobo, ListRAM l_ram) {
+void bruteForce(LListPC *ll_pc, ListCPU l_cpu, ListMotherboard l_mobo, ListRAM l_ram) {
     // Kamus Lokal
     int i,j,k;
-    int counter;
+    PC tempPC;
 
     // Algoritma
-    counter = 0;
     for (i = 0; i < l_cpu.size; i++) {
         for (j = 0; j < l_mobo.size; j++) {
             for (k = 0; k < l_ram.size; k++) {
                 if (!strcmp(l_cpu.container[i].socket, l_mobo.container[j].socket)
                     &&
-                    (l_mobo.container[j].ddr == l_ram.container[k].ddr)) {
-                    counter++;
-                    printf("\n\n[ ========= PC %d ========= ]\n", counter);
-                    printf("/* Spesifikasi Komponen */\n");
-                    printf("- CPU Socket : %s\n", l_cpu.container[i].socket);
-                    printf("- RAM DDR    : %d\n", l_ram.container[k].ddr);
-
-                    printf("\n/* Rekomendasi Komponen PC */\n");
-                    printf("- CPU\t      : %s\n", l_cpu.container[i].name);
-                    printf("- Motherboard : %s\n", l_mobo.container[j].name);
-                    printf("- RAM\t      : %s", l_ram.container[k].name);
+                   (l_mobo.container[j].ddr == l_ram.container[k].ddr)) {
+                    makePC(&tempPC, l_cpu.container[i], l_mobo.container[j], l_ram.container[k]);
+                    insertLListPC(ll_pc, tempPC);
                 }
             }
         }
@@ -39,6 +30,7 @@ int main() {
     ListCPU lc1;
     ListMotherboard lm1;
     ListRAM lr1;
+    LListPC llpc1;
 
     /// Objek
     CPU cpu1;
@@ -49,7 +41,7 @@ int main() {
     RAM rm1;
     RAM rm2;
 
-    /// Others
+    /// Counter
     int i;
 
     // Algoritma
@@ -62,10 +54,11 @@ int main() {
     makeRAM(&rm1, "Corsair Vengeance RGB 64 GB", 5);
     makeRAM(&rm2, "Crucial Pro 32 GB", 5);
 
-    /// Create List
+    /// Create Koleksi
     createListCPU(&lc1);
     createListMotherboard(&lm1);
     createListRAM(&lr1);
+    createLListPC(&llpc1);
 
     /// Insert Item
     insertListCPU(&lc1, cpu1);
@@ -85,6 +78,9 @@ int main() {
     printf("\n/* ============ RAM ============== */\n");
     printListRAM(lr1);
 
-    bruteForce(lc1, lm1, lr1);
+    bruteForce(&llpc1, lc1, lm1, lr1);
+
+    printf("\nBanyak Kombinasi PC = %d\n", nbElmLList(llpc1));
+    printLListPC(llpc1);    
 
 }
