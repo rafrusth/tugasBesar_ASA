@@ -1,9 +1,11 @@
 #ifndef PCType_H
 #define PCType_H
 
-// Banyak elemen pada List
-#define NBELM 5
+// Makro
+/// Banyak elemen pada list komponen PC
+#define nbElmList 5
 
+/// Linked List
 #define first(LL) (LL).first
 #define info(P) (P)->info
 #define next(P) (P)->next
@@ -23,7 +25,7 @@ typedef struct {
 /* 
     Relationship
     - Motherboard [DONE]
-    - PSU
+    - PSU [DONE]
 */
 
 typedef struct {
@@ -32,7 +34,7 @@ typedef struct {
 } GPU;
 /* 
     Relationship
-    - PSU
+    - PSU [DONE]
 */
 
 typedef struct {
@@ -52,8 +54,8 @@ typedef struct {
 } PSU;
 /* 
     Relationship
-    - CPU
-    - GPU
+    - CPU [DONE]
+    - GPU [DONE]
 */
 
 typedef struct {
@@ -74,26 +76,36 @@ typedef struct {
     CPU cpu;
     Motherboard motherboard;
     RAM ram;
-    // PSU psu;
-    // GPU gpu;
+    PSU psu;
+    GPU gpu;
     // Storage storage;
 } PC; // Sementara beberapa komponen
 
 /* List */
 typedef struct {
-    CPU container[NBELM];
+    CPU container[nbElmList];
     int size;
 } ListCPU;
 
 typedef struct {
-    Motherboard container[NBELM];
+    Motherboard container[nbElmList];
     int size;
 } ListMotherboard;
 
 typedef struct {
-    RAM container[NBELM];
+    RAM container[nbElmList];
     int size;
 } ListRAM;
+    
+typedef struct {
+    PSU container[nbElmList];
+    int size;
+} ListPSU;
+
+typedef struct {
+    GPU container[nbElmList];
+    int size;
+} ListGPU;
 
 /* Linked List */
 typedef PC infoType;
@@ -118,24 +130,32 @@ int nbElmLList(LListPC LL);
 void makeCPU(CPU *cpu, char *p_name, char *p_socket, int p_tdp);
 void makeMotherboard(Motherboard *mobo, char *p_name, char *p_socket, int p_ddr);
 void makeRAM(RAM *ram, char *p_name, int p_ddr);
-void makePC(PC *pc, CPU cpu, Motherboard mobo, RAM ram); // Sementara 3 komponen
+void makePSU(PSU *psu, char *p_name, int p_power);
+void makeGPU(GPU *gpu, char*p_name, int p_tdp);
+void makePC(PC *pc, CPU cpu, Motherboard mobo, RAM ram, PSU psu, GPU gpu); // Sementara 
 
 /// Create Koleksi
 void createListCPU(ListCPU *L);
 void createListMotherboard(ListMotherboard *L);
 void createListRAM(ListRAM *L);
+void createListPSU(ListPSU *L);
+void createListGPU(ListGPU *L);
 void createLListPC(LListPC *LL);
 
 /// Print Koleksi
 void printListCPU(ListCPU L);
-void printListMotheboard(ListMotherboard L);
+void printListMotherboard(ListMotherboard L);
 void printListRAM(ListRAM L);
+void printListPSU(ListPSU L);
+void printListGPU(ListGPU L);
 void printLListPC(LListPC LL);
 
 /// Insert Item
 void insertListCPU(ListCPU *L, CPU item);
 void insertListMotherboard(ListMotherboard *L, Motherboard item);
 void insertListRAM(ListRAM *L, RAM item);
+void insertListPSU(ListPSU *L, PSU item);
+void insertListGPU(ListGPU *L, GPU item);
 void insertLListPC(LListPC *LL, infoType PC);
 
 #endif
