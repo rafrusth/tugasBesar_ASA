@@ -8,10 +8,8 @@ void bruteForce(LListPC *ll_pc, ListCPU l_cpu, ListMotherboard l_mobo, ListRAM l
     // Kamus Lokal
     int i,j,k;
     PC tempPC;
-    // int counter;
 
     // Algoritma
-    // counter = 0;
     for (i = 0; i < l_cpu.size; i++) {
         for (j = 0; j < l_mobo.size; j++) {
             for (k = 0; k < l_ram.size; k++) {
@@ -43,7 +41,7 @@ int main() {
     RAM rm1;
     RAM rm2;
 
-    /// Others
+    /// Counter
     int i;
 
     // Algoritma
