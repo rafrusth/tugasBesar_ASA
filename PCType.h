@@ -3,7 +3,6 @@
 
 // Banyak elemen pada List
 #define NBELM 5
-#define PC_MAX 9999999
 
 #define first(LL) (LL).first
 #define info(P) (P)->info
