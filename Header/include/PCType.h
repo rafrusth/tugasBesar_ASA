@@ -1,3 +1,7 @@
+/* 
+ *  Pembuat   : Rafif Setya Imaduddin (24060124130115)
+ */
+
 #ifndef PCType_H
 #define PCType_H
 
@@ -41,11 +45,13 @@ typedef struct {
     char name[100];
     char socket[20];
     int ddr;
+    char storage_interface[5];
 } Motherboard;
 /* 
     Relationship
     - CPU [DONE]
     - RAM [DONE]
+    - Storage
 */
 
 typedef struct {
@@ -69,8 +75,12 @@ typedef struct {
 
 typedef struct {
     char name[100];
-    char type[20]; // HDD vs SSD
+    char interface[5]; // M2 / SATA
 } Storage;
+/* 
+    Relationship
+    - Motherboard
+*/
 
 typedef struct {
     CPU cpu;
@@ -78,8 +88,8 @@ typedef struct {
     RAM ram;
     PSU psu;
     GPU gpu;
-    // Storage storage;
-} PC; // Sementara beberapa komponen
+    Storage storage; 
+} PC;
 
 /* List */
 typedef struct {
@@ -107,6 +117,11 @@ typedef struct {
     int size;
 } ListGPU;
 
+typedef struct {
+    Storage container[nbElmList];
+    int size;
+} ListStorage;
+
 /* Linked List */
 typedef PC infoType;
 typedef struct tNodePC* Address;
@@ -128,11 +143,12 @@ int nbElmLList(LListPC LL);
 
 /// Make
 void makeCPU(CPU *cpu, char *p_name, char *p_socket, int p_tdp);
-void makeMotherboard(Motherboard *mobo, char *p_name, char *p_socket, int p_ddr);
+void makeMotherboard(Motherboard *mobo, char *p_name, char *p_socket, int p_ddr, char *p_interface);
 void makeRAM(RAM *ram, char *p_name, int p_ddr);
 void makePSU(PSU *psu, char *p_name, int p_power);
-void makeGPU(GPU *gpu, char*p_name, int p_tdp);
-void makePC(PC *pc, CPU cpu, Motherboard mobo, RAM ram, PSU psu, GPU gpu); // Sementara 
+void makeGPU(GPU *gpu, char *p_name, int p_tdp);
+void makeStorage(Storage *storage, char *p_name, char *p_interface);
+void makePC(PC *pc, CPU cpu, Motherboard mobo, RAM ram, PSU psu, GPU gpu, Storage storage); 
 
 /// Create Koleksi
 void createListCPU(ListCPU *L);
@@ -140,6 +156,7 @@ void createListMotherboard(ListMotherboard *L);
 void createListRAM(ListRAM *L);
 void createListPSU(ListPSU *L);
 void createListGPU(ListGPU *L);
+void createListStorage(ListStorage *L);
 void createLListPC(LListPC *LL);
 
 /// Print Koleksi
@@ -148,6 +165,7 @@ void printListMotherboard(ListMotherboard L);
 void printListRAM(ListRAM L);
 void printListPSU(ListPSU L);
 void printListGPU(ListGPU L);
+void printListStorage(ListStorage L);
 void printLListPC(LListPC LL);
 
 /// Insert Item
@@ -156,6 +174,7 @@ void insertListMotherboard(ListMotherboard *L, Motherboard item);
 void insertListRAM(ListRAM *L, RAM item);
 void insertListPSU(ListPSU *L, PSU item);
 void insertListGPU(ListGPU *L, GPU item);
+void insertListStorage(ListStorage *L, Storage item);
 void insertLListPC(LListPC *LL, infoType PC);
 
 #endif

@@ -1,6 +1,10 @@
+/* 
+ *  Pembuat   : Rafif Setya Imaduddin (24060124130115)
+ */
+
 #ifndef PCType_C
 #define PCType_C
-#include "PCType.h"
+#include "../../Header/include/PCType.h"
 
 /// Linked List
 Address alokasi(infoType PC) {
@@ -56,12 +60,13 @@ void makeCPU(CPU *cpu, char *p_name, char *p_socket, int p_tdp) {
     (*cpu).tdp = p_tdp;
 }
 
-void makeMotherboard(Motherboard *mobo, char *p_name, char *p_socket, int p_ddr) {
+void makeMotherboard(Motherboard *mobo, char *p_name, char *p_socket, int p_ddr, char *p_interface) {
     // Kamus Lokal
 
     // Algoritma
     strcpy((*mobo).name, p_name);
     strcpy((*mobo).socket, p_socket);
+    strcpy((*mobo).storage_interface, p_interface);
     (*mobo).ddr = p_ddr;
 }
 
@@ -89,7 +94,15 @@ void makeGPU(GPU *gpu, char *p_name, int p_tdp) {
     (*gpu).tdp = p_tdp;
 }
 
-void makePC(PC *pc, CPU p_cpu, Motherboard p_mobo, RAM p_ram, PSU p_psu, GPU p_gpu) {
+void makeStorage(Storage *storage, char *p_name, char *p_interface) {
+    // Kamus Lokal
+
+    // Algoritma
+    strcpy((*storage).name, p_name);
+    strcpy((*storage).interface, p_interface);
+}
+
+void makePC(PC *pc, CPU p_cpu, Motherboard p_mobo, RAM p_ram, PSU p_psu, GPU p_gpu, Storage p_storage) {
     // Kamus Lokal
 
     // Algoritma
@@ -98,6 +111,7 @@ void makePC(PC *pc, CPU p_cpu, Motherboard p_mobo, RAM p_ram, PSU p_psu, GPU p_g
     (*pc).ram = p_ram;
     (*pc).psu = p_psu;
     (*pc).gpu = p_gpu;
+    (*pc).storage = p_storage;
 }
 
 /// Create Koleksi
@@ -123,6 +137,7 @@ void createListMotherboard(ListMotherboard *L) {
     for (i = 0; i < nbElmList; i++) {
         strcpy((*L).container[i].name, "NULL");
         strcpy((*L).container[i].socket, "NULL");
+        strcpy((*L).container[i].storage_interface, "NULL");
         (*L).container[i].ddr = -999;
     }
 }
@@ -163,6 +178,18 @@ void createListGPU(ListGPU *L) {
     }
 }
 
+void createListStorage(ListStorage *L) {
+    // Kamus Lokal
+    int i;
+
+    // Algoritma
+    (*L).size = 0;
+    for (i = 0; i < nbElmList; i++) {
+        strcpy((*L).container[i].name, "NULL");
+        strcpy((*L).container[i].interface, "NULL");
+    }
+}
+
 void createLListPC(LListPC *LL) {
     // Kamus Lokal
 
@@ -190,10 +217,11 @@ void printListMotherboard(ListMotherboard L) {
 
     // Algoritma
     for (i = 0; i < L.size; i++) {
-        printf("%d) %s [Socket: %s, DDR: %d]\n", i + 1,
+        printf("%d) %s [Socket: %s, DDR: %d, Storage Interface: %s]\n", i + 1,
                                                 L.container[i].name,
                                                 L.container[i].socket,
-                                                L.container[i].ddr);
+                                                L.container[i].ddr,
+                                                L.container[i].storage_interface);
     }
 }
 
@@ -233,6 +261,18 @@ void printListGPU(ListGPU L) {
     }
 }
 
+void printListStorage(ListStorage L) {
+    // Kamus Lokal
+    int i;
+
+    // Algoritma
+    for (i = 0; i < L.size; i++) {
+        printf("%d) %s [Interface: %s]\n", i + 1,
+                                        L.container[i].name,
+                                        L.container[i].interface);
+    }
+}
+
 void printLListPC(LListPC LL) {
     // Kamus Lokal
     Address P;
@@ -246,14 +286,16 @@ void printLListPC(LListPC LL) {
             counter++;
             printf("\n[ ========= PC %d ========= ]\n", counter);
             printf("/* Spesifikasi Komponen */\n");
-            printf("- [CPU] Socket  : %s\n", info(P).cpu.socket);
-            printf("- [RAM] DDR     : %d\n", info(P).ram.ddr);
-            printf("- [PSU] Wattage : %d W\n", info(P).psu.power);
+            printf("- [CPU] Socket        : %s\n", info(P).cpu.socket);
+            printf("- [RAM] DDR           : %d\n", info(P).ram.ddr);
+            printf("- [PSU] Wattage       : %d W\n", info(P).psu.power);
+            printf("- [Storage] Interface : %s\n", info(P).storage.interface);
 
             printf("\n/* Rekomendasi Komponen PC */\n");
             printf("- CPU\t      : %s\n", info(P).cpu.name);
             printf("- GPU\t      : %s\n", info(P).gpu.name);
             printf("- RAM\t      : %s\n", info(P).ram.name);
+            printf("- Storage     : %s\n", info(P).storage.name);
             printf("- Motherboard : %s\n", info(P).motherboard.name);
             printf("- PSU\t      : %s\n", info(P).psu.name);
             P = next(P);
@@ -355,6 +397,28 @@ void insertListPSU(ListPSU *L, PSU item) {
 }
 
 void insertListGPU(ListGPU *L, GPU item) {
+    // Kamus Lokal
+    int i, emptyIdx;
+    bool empty;
+
+    // Algoritma
+    if ((*L).size < nbElmList) {
+        empty = false;
+        emptyIdx = -1;
+        i = 0;
+        while (!empty && i < nbElmList) {
+            if (!strcmp((*L).container[i].name, "NULL")) {
+                empty = true;
+                emptyIdx = i;
+            }
+            i++;
+        }
+        (*L).container[emptyIdx] = item;
+        (*L).size++;
+    }
+}
+
+void insertListStorage(ListStorage *L, Storage item) {
     // Kamus Lokal
     int i, emptyIdx;
     bool empty;
