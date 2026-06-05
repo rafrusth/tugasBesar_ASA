@@ -4,7 +4,7 @@
 
 #ifndef PCType_C
 #define PCType_C
-#include "../../Header/include/PCType.h"
+#include "../header/PCType.h"
 
 /// Linked List
 Address alokasi(infoType PC) {

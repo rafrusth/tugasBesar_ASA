@@ -2,8 +2,8 @@
  *  Pembuat   : Rafif Setya Imaduddin (24060124130115)
  */
 
-#include "../Header/include/PCType.h"
-#include "../Header/include/CSPAlgorithm.h"
+#include "../header/PCType.h"
+#include "../header/CSPAlgorithm.h"
 
 int main() {
     // Kamus

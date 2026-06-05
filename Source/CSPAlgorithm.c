@@ -2,7 +2,10 @@
  *  Pembuat   : Rafif Setya Imaduddin (24060124130115)
  */
 
-#include "../../Header/include/CSPAlgorithm.h"
+#ifndef CSPAlgorithm_C
+#define CSPAlgorithm_C
+
+#include "../header/CSPAlgorithm.h"
 
 bool isCompatible(CPU cpu, Motherboard mobo, RAM ram, PSU psu, GPU gpu, Storage storage) {
     // Kamus Lokal
@@ -127,3 +130,5 @@ void backtracking(int n, int *iteration, LListPC *ll_pc, PC pc, ListCPU l_cpu, L
         }
     }
 }
+
+#endif
