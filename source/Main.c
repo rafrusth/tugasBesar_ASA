@@ -2,8 +2,8 @@
  *  Pembuat   : Rafif Setya Imaduddin (24060124130115)
  */
 
-#include "header/PCType.h"
-#include "header/BruteForce.h"
+#include "../header/PCType.h"
+#include "../header/CSPAlgorithm.h"
 
 int main() {
     // Kamus
@@ -14,47 +14,23 @@ int main() {
     ListPSU lp1;
     ListGPU lg1;
     ListStorage ls1;
-    LListPC llpc1;
+
+    LListPC llpcBF;
+    LListPC llpcBT;
 
     /// Objek
-    CPU cpu1;
-    CPU cpu2;
-    CPU cpu3;
-    CPU cpu4;
-    CPU cpu5;
+    CPU cpu1, cpu2, cpu3, cpu4, cpu5;
+    Motherboard mb1, mb2, mb3, mb4, mb5;
+    RAM rm1, rm2, rm3, rm4, rm5;
+    PSU ps1, ps2, ps3, ps4, ps5;
+    GPU gp1, gp2, gp3, gp4, gp5;
+    Storage sg1, sg2, sg3, sg4, sg5;
 
-    Motherboard mb1;
-    Motherboard mb2;
-    Motherboard mb3;
-    Motherboard mb4;
-    Motherboard mb5;
+    PC tempPC;
 
-    RAM rm1;
-    RAM rm2;
-    RAM rm3;
-    RAM rm4;
-    RAM rm5;
-
-    PSU ps1;
-    PSU ps2;
-    PSU ps3;
-    PSU ps4;
-    PSU ps5;
-
-    GPU gp1;
-    GPU gp2;
-    GPU gp3;
-    GPU gp4;
-    GPU gp5;
-
-    Storage sg1;
-    Storage sg2;
-    Storage sg3;
-    Storage sg4;
-    Storage sg5;
-
-    // Size
+    // Lainnya
     int size;
+    int iterationBF, iterationBT;
 
     // Algoritma
     /// Make
@@ -101,7 +77,9 @@ int main() {
     createListPSU(&lp1);
     createListGPU(&lg1);
     createListStorage(&ls1);
-    createLListPC(&llpc1);
+
+    createLListPC(&llpcBF);
+    createLListPC(&llpcBT);
 
     /// Insert Item
     insertListCPU(&lc1, cpu1);
@@ -139,34 +117,45 @@ int main() {
     insertListStorage(&ls1, sg3);
     insertListStorage(&ls1, sg4);
     insertListStorage(&ls1, sg5);
+    
+    // Brute Force
+    iterationBF = 0;
+    iterationBF = bruteForce(&llpcBF, lc1, lm1, lr1, lp1, lg1, ls1);
+
+    // printLListPC(llpc1);  
+    
+    // Backtracking
+    iterationBT = 0;
+    initializePC(&tempPC);
+    backtracking(1, &iterationBT, &llpcBT, tempPC, lc1, lm1, lr1, lp1, lg1, ls1);
+    
+    // printLListPC(llpc1);  
 
     printf("\n/* ============ CPU ============  */\n");
     printListCPU(lc1);
 
-    printf("\n/* ============ Motherboard ============ */\n");
+    printf("/* ============ Motherboard ============ */\n");
     printListMotherboard(lm1);
 
-    printf("\n/* ============ RAM ============== */\n");
+    printf("/* ============ RAM ============== */\n");
     printListRAM(lr1);
 
-    printf("\n/* ============ PSU ============== */\n");
+    printf("/* ============ PSU ============== */\n");
     printListPSU(lp1);
 
-    printf("\n/* ============ GPU ============== */\n");
+    printf("/* ============ GPU ============== */\n");
     printListGPU(lg1);
     
-    printf("\n/* ============ Storage ============== */\n");
+    printf("/* ============ Storage ============== */\n");
     printListStorage(ls1);
-
-    // Brute Force
-    bruteForce(&llpc1, lc1, lm1, lr1, lp1, lg1, ls1);
-
-    printLListPC(llpc1);    
     
-    size = lc1.size * lm1.size * lr1.size * lp1.size * lg1.size * ls1.size;
-    printf("\nBanyak Kombinasi Seluruh Komponen = %d\n", size);
-    printf("Banyak Kombinasi Valid PC = %d\n", nbElmLList(llpc1));
-    
+    size = nbElmCPU(lc1) * nbElmMotherboard(lm1) * nbElmRAM(lr1) * nbElmPSU(lp1) * nbElmGPU(lg1) * nbElmStorage(ls1);
+    printf("/************ Jumlah ************/\n");
+    printf("Kombinasi Seluruh Komponen = %d\n", size);
+    printf("Kombinasi PC yang Valid\t   = %d\n\n", nbElmPC(llpcBF));
+    printf("Iterasi (Brute Force)\t   = %d\n", iterationBF);
+    printf("Iterasi (Backtracking)\t   = %d\n", iterationBT);
+
     return 0;
 
 }
