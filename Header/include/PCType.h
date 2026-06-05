@@ -6,7 +6,6 @@
 #define PCType_H
 
 // Makro
-/// Banyak elemen pada list komponen PC
 #define nbElmList 5
 
 /// Linked List
@@ -26,20 +25,11 @@ typedef struct {
     char socket[20];
     int tdp;
 } CPU;
-/* 
-    Relationship
-    - Motherboard [DONE]
-    - PSU [DONE]
-*/
 
 typedef struct {
     char name[100];
     int tdp;
 } GPU;
-/* 
-    Relationship
-    - PSU [DONE]
-*/
 
 typedef struct {
     char name[100];
@@ -47,40 +37,21 @@ typedef struct {
     int ddr;
     char storage_interface[5];
 } Motherboard;
-/* 
-    Relationship
-    - CPU [DONE]
-    - RAM [DONE]
-    - Storage
-*/
 
 typedef struct {
     char name[100];
     int power;
 } PSU;
-/* 
-    Relationship
-    - CPU [DONE]
-    - GPU [DONE]
-*/
 
 typedef struct {
     char name[100];
     int ddr;
 } RAM;
-/* 
-    Relationship
-    - Motherboard [DONE]
-*/
 
 typedef struct {
     char name[100];
     char interface[5]; // M2 / SATA
 } Storage;
-/* 
-    Relationship
-    - Motherboard
-*/
 
 typedef struct {
     CPU cpu;
@@ -94,32 +65,32 @@ typedef struct {
 /* List */
 typedef struct {
     CPU container[nbElmList];
-    int size;
+    int nbElm;
 } ListCPU;
 
 typedef struct {
     Motherboard container[nbElmList];
-    int size;
+    int nbElm;
 } ListMotherboard;
 
 typedef struct {
     RAM container[nbElmList];
-    int size;
+    int nbElm;
 } ListRAM;
     
 typedef struct {
     PSU container[nbElmList];
-    int size;
+    int nbElm;
 } ListPSU;
 
 typedef struct {
     GPU container[nbElmList];
-    int size;
+    int nbElm;
 } ListGPU;
 
 typedef struct {
     Storage container[nbElmList];
-    int size;
+    int nbElm;
 } ListStorage;
 
 /* Linked List */
@@ -139,7 +110,6 @@ typedef struct {
 /// Linked List
 Address alokasi(infoType PC);
 void dealokasi(Address P);
-int nbElmLList(LListPC LL);
 
 /// Make
 void makeCPU(CPU *cpu, char *p_name, char *p_socket, int p_tdp);
@@ -176,5 +146,32 @@ void insertListPSU(ListPSU *L, PSU item);
 void insertListGPU(ListGPU *L, GPU item);
 void insertListStorage(ListStorage *L, Storage item);
 void insertLListPC(LListPC *LL, infoType PC);
+
+/// Selector
+CPU selectorCPU(ListCPU L, int index);
+Motherboard selectorMotherboard(ListMotherboard L, int index);
+RAM selectorRAM(ListRAM L, int index);
+PSU selectorPSU(ListPSU L, int index);
+GPU selectorGPU(ListGPU L, int index);
+Storage selectorStorage(ListStorage L, int index);
+Storage getStorageFromPC(PC pc);
+
+/// nbElm
+int nbElmCPU(ListCPU L);
+int nbElmMotherboard(ListMotherboard L);
+int nbElmRAM(ListRAM L);
+int nbElmPSU(ListPSU L);
+int nbElmGPU(ListGPU L);
+int nbElmStorage(ListStorage L);
+int nbElmPC(LListPC LL);
+
+/// Inisialisasi PC
+void initializePC(PC *pc);
+void initializeCPU(CPU *cpu);
+void initializeGPU(GPU *gpu);
+void initializePSU(PSU *psu);
+void initializeRAM(RAM *ram);
+void initializeStorage(Storage *storage);
+void initializeMotherboard(Motherboard *mobo);
 
 #endif

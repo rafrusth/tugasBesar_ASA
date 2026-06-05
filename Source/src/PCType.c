@@ -32,24 +32,6 @@ void dealokasi(Address P) {
     P = NULL;
 }
 
-
-int nbElmLList(LListPC LL) {
-    // Kamus Lokal
-    Address P;
-    int counter;
-
-    // Algoritma
-    P = first(LL);
-    counter = 0;
-    while (P != NULL) {
-        counter++;
-        P = next(P);
-    }
-
-    return counter;
-
-}
-
 /// Make Objek
 void makeCPU(CPU *cpu, char *p_name, char *p_socket, int p_tdp) {
     // Kamus Lokal
@@ -120,79 +102,70 @@ void createListCPU(ListCPU *L) {
     int i;
 
     // Algoritma
-    (*L).size = 0;
+    (*L).nbElm = 0;
     for (i = 0; i < nbElmList; i++) {
-        strcpy((*L).container[i].name, "NULL");
-        strcpy((*L).container[i].socket, "NULL");
-        (*L).container[i].tdp = -999;
+        initializeCPU(&(*L).container[i]);
     }
 }
 
 void createListMotherboard(ListMotherboard *L) {
     // Kamus Lokal
     int i;
-
+    
     // Algoritma
-    (*L).size = 0;
+    (*L).nbElm = 0;
     for (i = 0; i < nbElmList; i++) {
-        strcpy((*L).container[i].name, "NULL");
-        strcpy((*L).container[i].socket, "NULL");
-        strcpy((*L).container[i].storage_interface, "NULL");
-        (*L).container[i].ddr = -999;
+        initializeMotherboard(&(*L).container[i]);
     }
 }
 
 void createListRAM(ListRAM *L) {
     // Kamus Lokal
     int i;
-
+    
     // Algoritma
-    (*L).size = 0;
+    (*L).nbElm = 0;
     for (i = 0; i < nbElmList; i++) {
-        strcpy((*L).container[i].name, "NULL");
-        (*L).container[i].ddr = -999;
+        initializeRAM(&(*L).container[i]);
     }
 }
 
 void createListPSU(ListPSU *L) {
     // Kamus Lokal
     int i;
-
+    
     // Algoritma
-    (*L).size = 0;
+    (*L).nbElm = 0;
     for (i = 0; i < nbElmList; i++) {
-        strcpy((*L).container[i].name, "NULL");
-        (*L).container[i].power = -999;
+        initializePSU(&(*L).container[i]);
     }
 }
 
 void createListGPU(ListGPU *L) {
     // Kamus Lokal
     int i;
-
+    
     // Algoritma
-    (*L).size = 0;
+    (*L).nbElm = 0;
     for (i = 0; i < nbElmList; i++) {
-        strcpy((*L).container[i].name, "NULL");
-        (*L).container[i].tdp = -999;
+        initializeGPU(&(*L).container[i]);
     }
 }
 
 void createListStorage(ListStorage *L) {
     // Kamus Lokal
     int i;
-
+    
     // Algoritma
-    (*L).size = 0;
+    (*L).nbElm = 0;
     for (i = 0; i < nbElmList; i++) {
-        strcpy((*L).container[i].name, "NULL");
-        strcpy((*L).container[i].interface, "NULL");
+        initializeStorage(&(*L).container[i]);
     }
 }
 
 void createLListPC(LListPC *LL) {
     // Kamus Lokal
-
+    
     // Algoritma
     first(*LL) = NULL;
 }
@@ -203,8 +176,8 @@ void printListCPU(ListCPU L) {
     int i;
 
     // Algoritma
-    for (i = 0; i < L.size; i++) {
-        printf("%d) %s [Socket: %s, TDP: %d]\n", i + 1,
+    for (i = 0; i < L.nbElm; i++) {
+        printf("%d) %s\n   - Socket : %s\n   - TDP    : %d W\n\n", i + 1,
                                                 L.container[i].name,
                                                 L.container[i].socket,
                                                 L.container[i].tdp);
@@ -216,8 +189,8 @@ void printListMotherboard(ListMotherboard L) {
     int i;
 
     // Algoritma
-    for (i = 0; i < L.size; i++) {
-        printf("%d) %s [Socket: %s, DDR: %d, Storage Interface: %s]\n", i + 1,
+    for (i = 0; i < L.nbElm; i++) {
+        printf("%d) %s\n   - Socket\t\t: %s\n   - DDR\t\t: %d\n   - Storage Interface\t: %s\n\n", i + 1,
                                                 L.container[i].name,
                                                 L.container[i].socket,
                                                 L.container[i].ddr,
@@ -230,8 +203,8 @@ void printListRAM(ListRAM L) {
     int i;
 
     // Algoritma
-    for (i = 0; i < L.size; i++) {
-        printf("%d) %s [DDR: %d]\n", i + 1,
+    for (i = 0; i < L.nbElm; i++) {
+        printf("%d) %s\n   - DDR: %d\n\n", i + 1,
                                     L.container[i].name,
                                     L.container[i].ddr);
     }
@@ -242,8 +215,8 @@ void printListPSU(ListPSU L) {
     int i;
 
     // Algoritma
-    for (i = 0; i < L.size; i++) {
-        printf("%d) %s [Power: %d W]\n", i + 1,
+    for (i = 0; i < L.nbElm; i++) {
+        printf("%d) %s\n   - Power: %d W\n\n", i + 1,
                                         L.container[i].name,
                                         L.container[i].power);
     }
@@ -254,8 +227,8 @@ void printListGPU(ListGPU L) {
     int i;
 
     // Algoritma
-    for (i = 0; i < L.size; i++) {
-        printf("%d) %s [Power: %d W]\n", i + 1,
+    for (i = 0; i < L.nbElm; i++) {
+        printf("%d) %s\n   - TDP: %d W\n\n", i + 1,
                                         L.container[i].name,
                                         L.container[i].tdp);
     }
@@ -266,8 +239,8 @@ void printListStorage(ListStorage L) {
     int i;
 
     // Algoritma
-    for (i = 0; i < L.size; i++) {
-        printf("%d) %s [Interface: %s]\n", i + 1,
+    for (i = 0; i < L.nbElm; i++) {
+        printf("%d) %s\n   - Interface: %s\n\n", i + 1,
                                         L.container[i].name,
                                         L.container[i].interface);
     }
@@ -311,7 +284,7 @@ void insertListCPU(ListCPU *L, CPU item) {
 
     // Algoritma
     empty = false;
-    if ((*L).size < nbElmList) {
+    if (nbElmCPU(*L) < nbElmList) {
         empty = false;
         emptyIdx = -1;
         i = 0;
@@ -323,7 +296,7 @@ void insertListCPU(ListCPU *L, CPU item) {
             i++;
         }
         (*L).container[emptyIdx] = item;
-        (*L).size++;
+        (*L).nbElm++;
     }
 }
 
@@ -334,7 +307,7 @@ void insertListMotherboard(ListMotherboard *L, Motherboard item) {
 
     // Algoritma
     empty = false;
-    if ((*L).size < nbElmList) {
+    if (nbElmMotherboard(*L) < nbElmList) {
         empty = false;
         emptyIdx = -1;
         i = 0;
@@ -348,7 +321,7 @@ void insertListMotherboard(ListMotherboard *L, Motherboard item) {
             i++;
         }
         (*L).container[emptyIdx] = item;
-        (*L).size++;
+        (*L).nbElm++;
     }
 }
 
@@ -358,7 +331,7 @@ void insertListRAM(ListRAM *L, RAM item) {
     bool empty;
 
     // Algoritma
-    if ((*L).size < nbElmList) {
+    if (nbElmRAM(*L) < nbElmList) {
         empty = false;
         emptyIdx = -1;
         i = 0;
@@ -370,7 +343,7 @@ void insertListRAM(ListRAM *L, RAM item) {
             i++;
         }
         (*L).container[emptyIdx] = item;
-        (*L).size++;
+        (*L).nbElm++;
     }
 }
 
@@ -380,7 +353,7 @@ void insertListPSU(ListPSU *L, PSU item) {
     bool empty;
 
     // Algoritma
-    if ((*L).size < nbElmList) {
+    if (nbElmPSU(*L) < nbElmList) {
         empty = false;
         emptyIdx = -1;
         i = 0;
@@ -392,7 +365,7 @@ void insertListPSU(ListPSU *L, PSU item) {
             i++;
         }
         (*L).container[emptyIdx] = item;
-        (*L).size++;
+        (*L).nbElm++;
     }
 }
 
@@ -402,7 +375,7 @@ void insertListGPU(ListGPU *L, GPU item) {
     bool empty;
 
     // Algoritma
-    if ((*L).size < nbElmList) {
+    if (nbElmGPU(*L) < nbElmList) {
         empty = false;
         emptyIdx = -1;
         i = 0;
@@ -414,7 +387,7 @@ void insertListGPU(ListGPU *L, GPU item) {
             i++;
         }
         (*L).container[emptyIdx] = item;
-        (*L).size++;
+        (*L).nbElm++;
     }
 }
 
@@ -424,7 +397,7 @@ void insertListStorage(ListStorage *L, Storage item) {
     bool empty;
 
     // Algoritma
-    if ((*L).size < nbElmList) {
+    if (nbElmStorage(*L) < nbElmList) {
         empty = false;
         emptyIdx = -1;
         i = 0;
@@ -436,7 +409,7 @@ void insertListStorage(ListStorage *L, Storage item) {
             i++;
         }
         (*L).container[emptyIdx] = item;
-        (*L).size++;
+        (*L).nbElm++;
     }
 }
 
@@ -457,6 +430,179 @@ void insertLListPC(LListPC *LL, infoType PC) {
             next(Q) = P;
         }
     }
+}
+
+/// Akses by Index
+CPU selectorCPU(ListCPU L, int index) {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.container[index];
+}
+
+Motherboard selectorMotherboard(ListMotherboard L, int index)  {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.container[index];
+}
+
+RAM selectorRAM(ListRAM L, int index)  {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.container[index];
+}
+
+PSU selectorPSU(ListPSU L, int index)  {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.container[index];
+}
+
+GPU selectorGPU(ListGPU L, int index)  {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.container[index];
+}
+
+Storage selectorStorage(ListStorage L, int index)  {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.container[index];
+}
+
+Storage getStorageFromPC(PC pc) {
+    // Kamus Lokal
+
+    // Algoritma
+    return pc.storage;
+}
+
+/// NbELm
+int nbElmCPU(ListCPU L) {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.nbElm;
+}
+
+int nbElmMotherboard(ListMotherboard L) {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.nbElm;
+}
+
+int nbElmRAM(ListRAM L) {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.nbElm;
+}
+
+int nbElmPSU(ListPSU L) {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.nbElm;
+}
+
+int nbElmGPU(ListGPU L) {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.nbElm;
+}
+
+int nbElmStorage(ListStorage L) {
+    // Kamus Lokal
+
+    // Algoritma
+    return L.nbElm;
+}
+
+int nbElmPC(LListPC LL) {
+    // Kamus Lokal
+    Address P;
+    int counter;
+
+    // Algoritma
+    P = first(LL);
+    counter = 0;
+    while (P != NULL) {
+        counter++;
+        P = next(P);
+    }
+
+    return counter;
+}
+
+/// Initialize PC
+void initializePC(PC *pc) {
+    // Kamus Lokal
+
+    // Algoritma
+    initializeCPU(&(*pc).cpu);
+    initializeGPU(&(*pc).gpu);
+    initializePSU(&(*pc).psu);
+    initializeRAM(&(*pc).ram);
+    initializeStorage(&(*pc).storage);
+    initializeMotherboard(&(*pc).motherboard);
+}
+
+void initializeCPU(CPU *cpu) {
+    // Kamus Lokal
+
+    // Algoritma
+    strcpy((*cpu).name, "NULL");
+    strcpy((*cpu).socket, "NULL");
+    (*cpu).tdp = -999;
+}
+
+void initializeGPU(GPU *gpu) {
+    // Kamus Lokal
+
+    // Algoritma
+    strcpy((*gpu).name, "NULL");
+    (*gpu).tdp = -999;
+}
+
+void initializePSU(PSU *psu) {
+    // Kamus Lokal
+
+    // Algoritma
+    strcpy((*psu).name, "NULL");
+    (*psu).power = -999;
+}
+
+void initializeRAM(RAM *ram) {
+    // Kamus Lokal
+
+    // Algoritma
+    strcpy((*ram).name, "NULL");
+    (*ram).ddr = -999;
+}
+
+void initializeStorage(Storage *storage) {
+    // Kamus Lokal
+
+    // Algoritma
+    strcpy((*storage).name, "NULL");
+    strcpy((*storage).interface, "NULL");
+}
+
+void initializeMotherboard(Motherboard *mobo) {
+    // Kamus Lokal
+
+    // Algoritma
+    strcpy((*mobo).name, "NULL");
+    strcpy((*mobo).socket, "NULL");
+    strcpy((*mobo).storage_interface, "NULL");
+    (*mobo).ddr = -999;
 }
 
 #endif
