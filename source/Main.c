@@ -17,6 +17,7 @@ int main() {
 
     LListPC llpcBF;
     LListPC llpcBT;
+    LListPC llpcIDS;
 
     /// Objek
     CPU cpu1, cpu2, cpu3, cpu4, cpu5;
@@ -29,8 +30,10 @@ int main() {
     PC tempPC;
 
     // Lainnya
-    int size;
-    int iterationBF, iterationBT;
+    int size, opsi, max_n, n;
+    int cpu, mobo, ram, psu, gpu, storage;
+    int iterationBF, iterationBT, iterationIDS;
+    bool start;
 
     // Algoritma
     /// Make
@@ -80,6 +83,7 @@ int main() {
 
     createLListPC(&llpcBF);
     createLListPC(&llpcBT);
+    createLListPC(&llpcIDS);
 
     /// Insert Item
     insertListCPU(&lc1, cpu1);
@@ -121,41 +125,119 @@ int main() {
     // Brute Force
     iterationBF = 0;
     iterationBF = bruteForce(&llpcBF, lc1, lm1, lr1, lp1, lg1, ls1);
-
-    // printLListPC(llpc1);  
     
     // Backtracking
     iterationBT = 0;
     initializePC(&tempPC);
     backtracking(1, &iterationBT, &llpcBT, tempPC, lc1, lm1, lr1, lp1, lg1, ls1);
     
-    // printLListPC(llpc1);  
-
+    
+    // Iterative Deepening Search
+    iterationIDS = 0;
+    max_n = 6;
+    initializePC(&tempPC);
+    iterativeDeepeningSearch(max_n, &iterationIDS, &llpcIDS, tempPC, lc1, lm1, lr1, lp1, lg1, ls1);
+    
+    printf("\n/* ============ DATASET ============  */\n");
     printf("\n/* ============ CPU ============  */\n");
     printListCPU(lc1);
-
+    
     printf("/* ============ Motherboard ============ */\n");
     printListMotherboard(lm1);
-
+    
     printf("/* ============ RAM ============== */\n");
     printListRAM(lr1);
-
+    
     printf("/* ============ PSU ============== */\n");
     printListPSU(lp1);
-
+    
     printf("/* ============ GPU ============== */\n");
     printListGPU(lg1);
     
     printf("/* ============ Storage ============== */\n");
     printListStorage(ls1);
     
-    size = nbElmCPU(lc1) * nbElmMotherboard(lm1) * nbElmRAM(lr1) * nbElmPSU(lp1) * nbElmGPU(lg1) * nbElmStorage(ls1);
-    printf("/************ Jumlah ************/\n");
-    printf("Kombinasi Seluruh Komponen = %d\n", size);
-    printf("Kombinasi PC yang Valid\t   = %d\n\n", nbElmPC(llpcBF));
-    printf("Iterasi (Brute Force)\t   = %d\n", iterationBF);
-    printf("Iterasi (Backtracking)\t   = %d\n", iterationBT);
+    cpu = nbElmCPU(lc1);
+    mobo = nbElmMotherboard(lm1);
+    ram = nbElmRAM(lr1);
+    psu = nbElmPSU(lp1);
+    gpu = nbElmGPU(lg1);
+    storage = nbElmStorage(ls1);
 
+    size = cpu * mobo * ram * psu * gpu * storage;
+    n = cpu + mobo + ram + psu + gpu + storage;
+    
+    start = true;
+    while (start) {
+        printf("\n/* ============ PC Compabilitor ============== */\n");
+        printf("/ ***** Pilihan Algoritma ***** /\n");
+        printf("[1] Brute Force\n");
+        printf("[2] Backtracking\n");
+        printf("[3] Iterative Deepening Search\n\n");
+        printf("/ ***** Opsi Lain ***** \n");
+        printf("[4] /* Tampilkan Kombinasi */\n");
+        printf("[5] /* Keluar Program */\n");
+        printf("Opsi : ");
+        scanf("%d", &opsi);
+        
+        switch(opsi) {
+            case 1:
+            printf("\n/************ Brute Force ************/\n");
+            printf("Banyak Komponen CPU \t    = %d\n", cpu);
+            printf("Banyak Komponen Motherboard = %d\n", mobo);
+            printf("Banyak Komponen RAM \t    = %d\n", ram);
+            printf("Banyak Komponen PSU \t    = %d\n", psu);
+            printf("Banyak Komponen GPU \t    = %d\n", gpu);
+            printf("Banyak Komponen Storage     = %d\n", storage);
+            printf("Total n     \t\t    = %d\n", n);
+            printf("\nKombinasi Seluruh Komponen  = %d\n", size);
+            printf("Kombinasi PC yang Valid\t    = %d\n", nbElmPC(llpcBF));
+            printf("Iterasi \t\t    = %d\n", iterationBF);
+            break;
+            
+            case 2:
+            printf("\n/************ Backtracking ************/\n");
+            printf("Banyak Komponen CPU \t    = %d\n", cpu);
+            printf("Banyak Komponen Motherboard = %d\n", mobo);
+            printf("Banyak Komponen RAM \t    = %d\n", ram);
+            printf("Banyak Komponen PSU \t    = %d\n", psu);
+            printf("Banyak Komponen GPU \t    = %d\n", gpu);
+            printf("Banyak Komponen Storage     = %d\n", storage);
+            printf("Total n     \t\t    = %d\n", n);
+            printf("\nKombinasi Seluruh Komponen  = %d\n", size);
+            printf("Kombinasi PC yang Valid\t    = %d\n", nbElmPC(llpcBT));
+            printf("Iterasi \t\t    = %d\n", iterationBT);
+            break;
+            
+            case 3:
+            printf("\n/**** Iterative Deepening Search ****/\n");
+            printf("Banyak Komponen CPU \t    = %d\n", cpu);
+            printf("Banyak Komponen Motherboard = %d\n", mobo);
+            printf("Banyak Komponen RAM \t    = %d\n", ram);
+            printf("Banyak Komponen PSU \t    = %d\n", psu);
+            printf("Banyak Komponen GPU \t    = %d\n", gpu);
+            printf("Banyak Komponen Storage     = %d\n", storage);
+            printf("Total n     \t\t    = %d\n", n);
+            printf("\nKombinasi Seluruh Komponen  = %d\n", size);
+            printf("Kombinasi PC yang Valid\t    = %d\n", nbElmPC(llpcIDS));
+            printf("Iterasi \t\t    = %d\n", iterationIDS);
+            break;
+            
+            case 4:
+                printLListPC(llpcBT);
+                break;
+            
+            case 5:
+            start = false;
+            break;
+            
+            default:
+            printf("Opsi tidak ada dalam pilihan\n");
+            return 0;
+        }
+    }
+    
+    
     return 0;
-
+    
 }

@@ -84,16 +84,19 @@ void makeStorage(Storage *storage, char *p_name, char *p_interface) {
     strcpy((*storage).interface, p_interface);
 }
 
-void makePC(PC *pc, CPU p_cpu, Motherboard p_mobo, RAM p_ram, PSU p_psu, GPU p_gpu, Storage p_storage) {
+PC makePC(CPU p_cpu, Motherboard p_mobo, RAM p_ram, PSU p_psu, GPU p_gpu, Storage p_storage) {
     // Kamus Lokal
+    PC tempPc;
 
     // Algoritma
-    (*pc).cpu = p_cpu;
-    (*pc).motherboard = p_mobo;
-    (*pc).ram = p_ram;
-    (*pc).psu = p_psu;
-    (*pc).gpu = p_gpu;
-    (*pc).storage = p_storage;
+    (tempPc).cpu = p_cpu;
+    (tempPc).motherboard = p_mobo;
+    (tempPc).ram = p_ram;
+    (tempPc).psu = p_psu;
+    (tempPc).gpu = p_gpu;
+    (tempPc).storage = p_storage;
+
+    return tempPc;
 }
 
 /// Create Koleksi
