@@ -1,5 +1,7 @@
 /* 
- *  Pembuat   : Rafif Setya Imaduddin (24060124130115)
+ *  Pembuat     : Rafif Setya Imaduddin (24060124130115)
+ *  Mata Kuliah : Analisis dan Strategi Algoritma
+ *  Kelas       : E
  */
 
 #include "../header/PCType.h"
