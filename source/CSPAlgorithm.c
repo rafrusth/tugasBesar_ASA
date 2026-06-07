@@ -26,8 +26,6 @@ bool isCompatible(CPU cpu, Motherboard mobo, RAM ram, PSU psu, GPU gpu, Storage 
     }
 }
 
-
-
 int bruteForce(LListPC *ll_pc, ListCPU l_cpu, ListMotherboard l_mobo, ListRAM l_ram, ListPSU l_psu, ListGPU l_gpu, ListStorage l_storage) {
     // Kamus Lokal
     int count_cpu, count_mobo, count_ram, count_psu, count_gpu, count_storage;
@@ -131,6 +129,13 @@ void backtracking(int n, int *iteration, LListPC *ll_pc, PC pc, ListCPU l_cpu, L
     }
 }
 
+bool isCompatibleIds(PC pc) {
+    // Kamus Lokal
+
+    // Algoritma
+    return ((pc.ram.ddr == pc.motherboard.ddr) && !strcmp(pc.cpu.socket, pc.motherboard.socket) && ((pc.cpu.tdp + pc.gpu.tdp) <= pc.psu.power) && (!strcmp(pc.motherboard.storage_interface, pc.storage.interface)));
+}
+
 void limitDepth(int n, int limit, int *iteration, PC pc, ListCPU l_cpu, ListMotherboard l_mobo, ListRAM l_ram, ListPSU l_psu, ListGPU l_gpu, ListStorage l_storage, LListPC *ll_pc) {
     // Kamus Lokal
     int i;
@@ -138,56 +143,46 @@ void limitDepth(int n, int limit, int *iteration, PC pc, ListCPU l_cpu, ListMoth
     // Algoritma
     if (n > limit) {
         if (n == 7) {
-            insertLListPC(ll_pc, pc);
+            if (isCompatibleIds(pc)) {
+                insertLListPC(ll_pc, pc);
+            }
         }
     } else {
         if (n == 1) {
                 for (i = 0; i < nbElmCPU(l_cpu); i++) {
                     pc.cpu = selectorCPU(l_cpu, i);
+                    limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
                     (*iteration)++;
-                    if (isCompatibleBt(pc, n)) {
-                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
-                    }
                 }
             } else if (n == 2) {
                 for (i = 0; i < nbElmMotherboard(l_mobo); i++) {
                     pc.motherboard = selectorMotherboard(l_mobo, i);
+                    limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
                     (*iteration)++;
-                    if (isCompatibleBt(pc, n)) {
-                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
-                    }
                 }
             } else if (n == 3) {
                 for (i = 0; i < nbElmRAM(l_ram); i++) {
                     pc.ram = selectorRAM(l_ram, i);
+                    limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
                     (*iteration)++;
-                    if (isCompatibleBt(pc, n)) {
-                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
-                    }
                 }
             } else if (n == 4) {
                 for (i = 0; i < nbElmPSU(l_psu); i++) {
                     pc.psu = selectorPSU(l_psu, i);
+                    limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
                     (*iteration)++;
-                    if (isCompatibleBt(pc, n)) {
-                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
-                    }
                 }
             } else if (n == 5) {
                 for (i = 0; i < nbElmGPU(l_gpu); i++) {
                     pc.gpu = selectorGPU(l_gpu, i);
+                    limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
                     (*iteration)++;
-                    if (isCompatibleBt(pc, n)) {
-                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
-                    }
                 }
             } else if (n == 6) {
                 for (i = 0; i < nbElmStorage(l_storage); i++) {
                     pc.storage = selectorStorage(l_storage, i);
+                    limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
                     (*iteration)++;
-                    if (isCompatibleBt(pc, n)) {
-                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
-                    }
                 }
             }
     }
