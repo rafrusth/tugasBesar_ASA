@@ -44,7 +44,7 @@ int bruteForce(LListPC *ll_pc, ListCPU l_cpu, ListMotherboard l_mobo, ListRAM l_
                         for (count_storage = 0; count_storage < nbElmStorage(l_storage); count_storage++) {
                             counter++;
                             if (isCompatible(selectorCPU(l_cpu, count_cpu), selectorMotherboard(l_mobo, count_mobo), selectorRAM(l_ram, count_ram), selectorPSU(l_psu, count_psu), selectorGPU(l_gpu, count_gpu), selectorStorage(l_storage, count_storage))) {
-                                makePC(&tempPC, selectorCPU(l_cpu, count_cpu), selectorMotherboard(l_mobo, count_mobo), selectorRAM(l_ram, count_ram), selectorPSU(l_psu, count_psu), selectorGPU(l_gpu, count_gpu), selectorStorage(l_storage, count_storage));
+                                tempPC = makePC(selectorCPU(l_cpu, count_cpu), selectorMotherboard(l_mobo, count_mobo), selectorRAM(l_ram, count_ram), selectorPSU(l_psu, count_psu), selectorGPU(l_gpu, count_gpu), selectorStorage(l_storage, count_storage));
                                 insertLListPC(&(*ll_pc), tempPC);
                             }
                         }
@@ -70,7 +70,7 @@ bool isCompatibleBt(PC pc, int n) {
         
         case 3:
             return (pc.ram.ddr == pc.motherboard.ddr);
-     
+    
         case 4:
             return (pc.cpu.tdp <= pc.psu.power);
             
@@ -128,6 +128,78 @@ void backtracking(int n, int *iteration, LListPC *ll_pc, PC pc, ListCPU l_cpu, L
                 backtracking(n + 1, iteration, &(*ll_pc), pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage);
             }
         }
+    }
+}
+
+void limitDepth(int n, int limit, int *iteration, PC pc, ListCPU l_cpu, ListMotherboard l_mobo, ListRAM l_ram, ListPSU l_psu, ListGPU l_gpu, ListStorage l_storage, LListPC *ll_pc) {
+    // Kamus Lokal
+    int i;
+
+    // Algoritma
+    if (n > limit) {
+        if (n == 7) {
+            insertLListPC(ll_pc, pc);
+        }
+    } else {
+        if (n == 1) {
+                for (i = 0; i < nbElmCPU(l_cpu); i++) {
+                    pc.cpu = selectorCPU(l_cpu, i);
+                    (*iteration)++;
+                    if (isCompatibleBt(pc, n)) {
+                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
+                    }
+                }
+            } else if (n == 2) {
+                for (i = 0; i < nbElmMotherboard(l_mobo); i++) {
+                    pc.motherboard = selectorMotherboard(l_mobo, i);
+                    (*iteration)++;
+                    if (isCompatibleBt(pc, n)) {
+                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
+                    }
+                }
+            } else if (n == 3) {
+                for (i = 0; i < nbElmRAM(l_ram); i++) {
+                    pc.ram = selectorRAM(l_ram, i);
+                    (*iteration)++;
+                    if (isCompatibleBt(pc, n)) {
+                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
+                    }
+                }
+            } else if (n == 4) {
+                for (i = 0; i < nbElmPSU(l_psu); i++) {
+                    pc.psu = selectorPSU(l_psu, i);
+                    (*iteration)++;
+                    if (isCompatibleBt(pc, n)) {
+                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
+                    }
+                }
+            } else if (n == 5) {
+                for (i = 0; i < nbElmGPU(l_gpu); i++) {
+                    pc.gpu = selectorGPU(l_gpu, i);
+                    (*iteration)++;
+                    if (isCompatibleBt(pc, n)) {
+                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
+                    }
+                }
+            } else if (n == 6) {
+                for (i = 0; i < nbElmStorage(l_storage); i++) {
+                    pc.storage = selectorStorage(l_storage, i);
+                    (*iteration)++;
+                    if (isCompatibleBt(pc, n)) {
+                        limitDepth(n + 1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
+                    }
+                }
+            }
+    }
+}
+
+void iterativeDeepeningSearch(int max_n, int *iteration, LListPC *ll_pc, PC pc, ListCPU l_cpu, ListMotherboard l_mobo, ListRAM l_ram, ListPSU l_psu, ListGPU l_gpu, ListStorage l_storage) {
+    // Kamus Lokal
+    int limit;
+
+    // Algoritma
+    for (limit = 1; limit <= max_n; limit++) {
+        limitDepth(1, limit, iteration, pc, l_cpu, l_mobo, l_ram, l_psu, l_gpu, l_storage, ll_pc);
     }
 }
 

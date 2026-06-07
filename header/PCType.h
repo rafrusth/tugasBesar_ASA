@@ -118,7 +118,7 @@ void makeRAM(RAM *ram, char *p_name, int p_ddr);
 void makePSU(PSU *psu, char *p_name, int p_power);
 void makeGPU(GPU *gpu, char *p_name, int p_tdp);
 void makeStorage(Storage *storage, char *p_name, char *p_interface);
-void makePC(PC *pc, CPU cpu, Motherboard mobo, RAM ram, PSU psu, GPU gpu, Storage storage); 
+PC makePC(CPU cpu, Motherboard mobo, RAM ram, PSU psu, GPU gpu, Storage storage); 
 
 /// Create Koleksi
 void createListCPU(ListCPU *L);
